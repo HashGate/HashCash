@@ -1,6 +1,19 @@
-// Copyright (c) 2011-2016 The Cryptonote developers
-// Distributed under the MIT/X11 software license, see the accompanying
-// file COPYING or http://www.opensource.org/licenses/mit-license.php.
+// Copyright (c) 2012-2016, The CryptoNote developers, The Bytecoin developers
+//
+// This file is part of Bytecoin.
+//
+// Bytecoin is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Bytecoin is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with Bytecoin.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <stddef.h>
 #include <stdint.h>
@@ -66,7 +79,14 @@ union cn_slow_hash_state {
 #endif
 
 struct cn_ctx {
-  ALIGNED_DECL(uint8_t long_state[MEMORY], 16);
+
+#ifndef FORCE_USE_HEAP
+	ALIGNED_DECL(uint8_t long_state[MEMORY], 16);
+#else
+    ALIGNED_DECL(uint8_t *long_state = NULL);
+    ALIGNED_DECL(long_state = (uint8_t *)malloc(MEMORY));
+#endif
+//  ALIGNED_DECL(uint8_t long_state[MEMORY], 16);  
   ALIGNED_DECL(union cn_slow_hash_state state, 16);
   ALIGNED_DECL(uint8_t text[INIT_SIZE_BYTE], 16);
   ALIGNED_DECL(uint64_t a[AES_BLOCK_SIZE >> 3], 16);

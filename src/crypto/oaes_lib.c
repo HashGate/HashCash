@@ -33,7 +33,14 @@ static const char _NR[] = {
 
 #include <stddef.h>
 #include <time.h> 
-#include <sys/timeb.h>
+
+// ANDROID, FreeBSD, and OpenBSD also don't need timeb.h
+#if !defined(__FreeBSD__) && !defined(__OpenBSD__) && !defined(__ANDROID__)
+ #include <sys/timeb.h>
+#else
+ #include <sys/time.h>
+#endif
+
 #ifdef __APPLE__
 #include <malloc/malloc.h>
 #else 

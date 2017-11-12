@@ -1,6 +1,22 @@
-// Copyright (c) 2011-2016 The Cryptonote developers
-// Distributed under the MIT/X11 software license, see the accompanying
-// file COPYING or http://www.opensource.org/licenses/mit-license.php.
+// Copyright (c) 2012-2016, The CryptoNote developers, The Bytecoin developers, The Karbovanets developers, The HashCash developers
+// Copyright (c) 2014-2016 XDN developers
+// Copyright (c) 2016-2017 The Karbowanec developers
+// Copyright (c) 2017 The HashCash developers
+//
+// This file is part of Bytecoin.
+//
+// Bytecoin is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Bytecoin is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with Bytecoin.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
@@ -26,6 +42,8 @@
 #include <System/Dispatcher.h>
 #include <System/Ipv4Address.h>
 
+std::string remote_fee_address;
+
 namespace CryptoNote
 {
   /************************************************************************/
@@ -42,6 +60,7 @@ namespace CryptoNote
 
     bool process_command(const std::vector<std::string> &args);
     std::string get_commands_str();
+    std::string getFeeAddress();
 
     const CryptoNote::Currency& currency() const { return m_currency; }
 
@@ -62,6 +81,9 @@ namespace CryptoNote
     bool run_console_handler();
 
     bool new_wallet(const std::string &wallet_file, const std::string& password);
+    bool new_wallet(Crypto::SecretKey &secret_key, Crypto::SecretKey &view_key, const std::string &wallet_file, const std::string& password);
+    bool new_wallet(AccountKeys &private_key, const std::string &wallet_file, const std::string& password);
+    bool new_tracking_wallet(AccountKeys &tracking_key, const std::string &wallet_file, const std::string& password);
     bool open_wallet(const std::string &wallet_file, const std::string& password);
     bool close_wallet();
 
@@ -70,6 +92,8 @@ namespace CryptoNote
     bool start_mining(const std::vector<std::string> &args);
     bool stop_mining(const std::vector<std::string> &args);
     bool show_balance(const std::vector<std::string> &args = std::vector<std::string>());
+    bool export_keys(const std::vector<std::string> &args = std::vector<std::string>());
+    bool export_tracking_key(const std::vector<std::string> &args = std::vector<std::string>());
     bool show_incoming_transfers(const std::vector<std::string> &args);
     bool show_payments(const std::vector<std::string> &args);
     bool show_blockchain_height(const std::vector<std::string> &args);
@@ -79,6 +103,10 @@ namespace CryptoNote
     bool save(const std::vector<std::string> &args);
     bool reset(const std::vector<std::string> &args);
     bool set_log(const std::vector<std::string> &args);
+	bool change_password();
+	std::string get_password();
+	std::string resolveAlias(const std::string& aliasUrl);
+	bool fetch_dns_txt(const std::string domain, std::string &record);
 
     bool ask_wallet_create_if_needed();
 
@@ -141,11 +169,14 @@ namespace CryptoNote
   private:
     std::string m_wallet_file_arg;
     std::string m_generate_new;
+    std::string m_import_new;
+    std::string m_restore_new;
+    std::string m_track_new;
     std::string m_import_path;
-
     std::string m_daemon_address;
     std::string m_daemon_host;
     uint16_t m_daemon_port;
+    std::string m_change_password;
 
     std::string m_wallet_file;
 
@@ -156,12 +187,14 @@ namespace CryptoNote
     Logging::LoggerManager& logManager;
     System::Dispatcher& m_dispatcher;
     Logging::LoggerRef logger;
+    Tools::PasswordContainer pwd_container;
 
     std::unique_ptr<CryptoNote::NodeRpcProxy> m_node;
     std::unique_ptr<CryptoNote::IWalletLegacy> m_wallet;
     refresh_progress_reporter_t m_refresh_progress_reporter;
 
     bool m_walletSynchronized;
+    bool m_trackingWallet;
     std::mutex m_walletSynchronizedMutex;
     std::condition_variable m_walletSynchronizedCV;
   };
