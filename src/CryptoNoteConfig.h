@@ -1,5 +1,4 @@
 // Copyright (c) 2012-2016, The CryptoNote developers, The Bytecoin developers, The Karbowanec developers
-// Copyright (c) 2017, The HashCash developers
 //
 // This file is part of Bytecoin.
 //
@@ -36,7 +35,7 @@ const size_t   BLOCKCHAIN_TIMESTAMP_CHECK_WINDOW             = 60;
 const uint64_t MONEY_SUPPLY                                  = ((uint64_t)(-1));
 const uint64_t TAIL_EMISSION_REWARD                          = UINT64_C(1000000000000);
 const size_t CRYPTONOTE_COIN_VERSION                         = 1;
-const unsigned EMISSION_SPEED_FACTOR                         = 19;
+const unsigned EMISSION_SPEED_FACTOR                         = 18;
 static_assert(EMISSION_SPEED_FACTOR <= 8 * sizeof(uint64_t), "Bad EMISSION_SPEED_FACTOR");
 
 const size_t   CRYPTONOTE_REWARD_BLOCKS_WINDOW               = 100;
@@ -46,10 +45,10 @@ const size_t   CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1  = 100000;
 const size_t   CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_CURRENT = CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE;
 const size_t   CRYPTONOTE_COINBASE_BLOB_RESERVED_SIZE        = 600;
 const size_t   CRYPTONOTE_DISPLAY_DECIMAL_POINT              = 12;
-const uint64_t MINIMUM_FEE                                   = UINT64_C(100000000);
-const uint64_t DEFAULT_DUST_THRESHOLD                        = UINT64_C(100000000);
+const uint64_t MINIMUM_FEE                                   = UINT64_C(50000000);
+const uint64_t DEFAULT_DUST_THRESHOLD                        = UINT64_C(50000000);
 
-const uint64_t DIFFICULTY_TARGET                             = 360; // seconds
+const uint64_t DIFFICULTY_TARGET                             = 60; // seconds
 const uint64_t EXPECTED_NUMBER_OF_BLOCKS_PER_DAY             = 24 * 60 * 60 / DIFFICULTY_TARGET;
 const size_t   DIFFICULTY_WINDOW                             = EXPECTED_NUMBER_OF_BLOCKS_PER_DAY; // blocks
 const size_t   DIFFICULTY_WINDOW_V2                          = 17; // blocks
@@ -90,7 +89,7 @@ const char     MINER_CONFIG_FILE_NAME[]                      = "miner_conf.json"
 } // parameters
 
 const char     CRYPTONOTE_NAME[]                             = "hashcash";
-const char     GENESIS_COINBASE_TX_HEX[]                     = "010a01ff0001ffffffffffff07029b2e4c0281c0b02e7c53291a94d1d0cbff8883f8024f5142ee494ffbbd0880712101ff09a670620aaf133f3893c3c21d7f874219aa9c81635e4471fc311757260e48";
+const char     GENESIS_COINBASE_TX_HEX[]                     = "013c01ff0001ffffffffffff0f029b2e4c0281c0b02e7c53291a94d1d0cbff8883f8024f5142ee494ffbbd0880712101558d87fb3404c0e6031319f48571dbf748b9c5a083f2a7a2ffb44e779d988926";
 
 const uint8_t  CURRENT_TRANSACTION_VERSION                   =  1;
 const uint8_t  BLOCK_MAJOR_VERSION_1                         =  1;

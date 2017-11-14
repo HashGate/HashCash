@@ -1,5 +1,4 @@
 // Copyright (c) 2012-2016, The CryptoNote developers, The Bytecoin developers, The Karbowanec developers
-// Copyright (c) 2017 The HashCash developers
 //
 // This file is part of Bytecoin.
 //
@@ -27,7 +26,9 @@ namespace CryptoNote
 {
 	namespace
 	{
-		boost::uuids::uuid u = { { 0x69, 0x72, 0x69, 0x64, 0x64, 0x79, 0x3f, 0x20, 0x69, 0x74, 0x73, 0x20, 0x79, 0x75, 0x6f, 0x3f } };
+		boost::uuids::uuid name;
+		boost::uuids::name_generator gen(name);
+		boost::uuids::uuid u = { { 0x46, 0x72, 0x65, 0x64, 0x64, 0x79, 0x3f, 0x20, 0x69, 0x74, 0x73, 0x20, 0x79, 0x75, 0x6f, 0x3f } };
 	}
 	const static boost::uuids::uuid BYTECOIN_NETWORK = u;
 }
