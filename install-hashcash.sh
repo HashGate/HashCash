@@ -15,14 +15,14 @@ elif [[ $DISTRIB_ID=Ubuntu && $DISTRIB_RELEASE == 16.10 ]] ; then
     sudo apt-get -y install build-essential python-dev gcc-4.9 g++-4.9 git cmake librocksdb-dev
     
 
-elif [[$VERSION=8 && $ID=debian]] ; then
+elif [[$VERSION_ID == 8 && $ID=debian ]] ; then
 	apt-get -y install python-software-properties
 	add-apt-repository -y ppa:ubuntu-toolchain-r/test
 	apt-get update
 	apt-get -y install gcc-4.8 g++-4.8 rlwrap git cmake build-essential libunbound-dev
 
 else
-    echo "Only Ubuntu 16.04, Ubuntu 16.10 and Debian 8 are supported (actually)"
+    echo "Only Ubuntu 16.04, Ubuntu 16.10 and Debian 8 (jessie) are supported (actually)"
 	
 fi	
 
@@ -65,7 +65,7 @@ if [[ $NUM == "1" || $NUM == "3" ]]; then
 			sudo apt-get update
 			sudo apt-get -y install libboost1.61-all-dev
 			
-		elif [[$VERSION=8 && $ID=debian]] ; then
+		elif [[ $VERSION_ID == 8 && $ID=debian ]] ; then
 		# simple search to get and grab the files required
 			apt-get update
 			apt-get -y install python-dev autotools-dev libicu-dev build-essential libbz2-dev 
@@ -170,7 +170,7 @@ if [[ $NUM == "1" || $NUM == "3" ]]; then
 			# will not hurt.
 			sudo ldconfig  
 			echo "Boost installation complete."
-		elif [[$VERSION=8 && $ID=debian]] ; then
+		elif [[ $VERSION_ID == 8 && $ID=debian ]] ; then
 			# simple search to get and grab the files required
 				apt-get update
 				apt-get -y install python-dev autotools-dev libicu-dev build-essential libbz2-dev 
@@ -231,7 +231,7 @@ if [[ $NUM == "1" || $NUM == "3" || $NUM == "6" || $NUM == "8" ]]; then
 		sudo cp /usr/bin/g++ /usr/bin/g++.oldsymlink
 		sudo rm /usr/bin/g++
 		sudo ln -s /usr/bin/g++-4.9 /usr/bin/g++
-	elif [[$VERSION=8 && $ID=debian]] ; then
+	elif [[ $VERSION_ID == 8 && $ID=debian ]] ; then
 		cp /usr/bin/gcc /usr/bin/gcc.oldsymlink
 		rm /usr/bin/gcc
 		ln -s /usr/bin/gcc-4.8 /usr/bin/gcc
@@ -245,12 +245,13 @@ if [[ $NUM == "1" || $NUM == "3" || $NUM == "6" || $NUM == "8" ]]; then
 
 	#Cloning github project 
 	echo "Downloading HashCash essentials"
+	
 	if [[ $NUM == "6" || $NUM == "8" ]]; then
 		cd ~/hashcash/ 
 		git pull
 	else
 		cd ~
-		git clone git://github.com/HashGate/HashCash.git
+		git clone git://github.com/HashGate/HashCash.git hashcash
 	fi
 	
 	# Find the number of available hardware threads
@@ -260,17 +261,9 @@ if [[ $NUM == "1" || $NUM == "3" || $NUM == "6" || $NUM == "8" ]]; then
 	cd ./hashcash
 	mkdir ./build
 	
-	#Decision to compile tests
-	echo "Do you want to compile tests too? This subdirectory is related to not yet implemented features, which need further testing. 
-		Not installing it will significantly speed up your compilation time. Do you want to install it	[y/n]?"
-	if [[ $a == "Y" || $a == "y" ]]; then
-       sed -i '/^add_subdirectory(tests)$/d' CMakeLists.txt
-	fi
-	
 	#Building with maximum number of cores
-	if [$n !== 1] 
-	then
-		$n = $n / 2
+	if [ $n != 1 ] ; then
+		$n = $(nproc) / 2
 		make -j $n
 	else
 		make
@@ -295,7 +288,7 @@ if [[ $NUM == "1" || $NUM == "3" || $NUM == "6" || $NUM == "8" ]]; then
 		sudo cp /usr/bin/g++.oldsymlink /usr/bin/g++
 		sudo rm /usr/bin/g++.oldsymlink
 
-	elif [[$VERSION=8 && $ID=debian]] ; then
+	elif [[ $VERSION_ID == 8 && $ID=debian ]] ; then
 		#linking symlinks back to old gcc/g++ versions
 		rm /usr/bin/gcc
 		cp /usr/bin/gcc.oldsymlink /usr/bin/gcc
@@ -305,7 +298,7 @@ if [[ $NUM == "1" || $NUM == "3" || $NUM == "6" || $NUM == "8" ]]; then
 		cp /usr/bin/g++.oldsymlink /usr/bin/g++
 		rm /usr/bin/g++.oldsymlink
 	fi
-
+fi
 	
 	
 	
@@ -340,7 +333,6 @@ if [[ $NUM == "1" || $NUM == "3" || $NUM == "6" || $NUM == "8" ]]; then
 		
 			echo "Download completed"
 		fi
-fi
 
 #############################################################
 #Installing Wolf's CPUMiner. A fast pool miner utilizing AES
@@ -363,7 +355,7 @@ if [[ $NUM == "2" || $NUM == "3" || $NUM == "7" || $NUM == "8" ]]; then
 		sudo apt-get install -y automake libcurl4-openssl-dev pkg-config
 		sudo apt-get update
 
-	elif [[$VERSION=8 && $ID=debian]] ; then
+	elif [[ $VERSION_ID == 8 && $ID=debian ]] ; then
 		#Installing required packages
 		echo "Installing required packages"
 		apt-get install -y automake libcurl4-openssl-dev pkg-config
