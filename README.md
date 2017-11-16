@@ -1,5 +1,10 @@
 # HashCash
 
+# -= Install =-
+
+Run the install-hashcash.sh on your server or just follow the guide below.
+
+
 -= Dependencies =-
 
 The following table summarizes the tools and libraries required to build.  A
