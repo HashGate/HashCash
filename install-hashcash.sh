@@ -96,108 +96,109 @@ if [[ $NUM == "1" || $NUM == "3" ]]; then
 		fi
 	else	
 	
-	if [[ $DISTRIB_ID=Ubuntu && $DISTRIB_RELEASE == 16.04 ]] ; then
-		# simple search to get and grab the files required
-		sudo apt-get update
-		sudo apt-get -y install python-dev autotools-dev libicu-dev build-essential libbz2-dev 
+		if [[ $DISTRIB_ID=Ubuntu && $DISTRIB_RELEASE == 16.04 ]] ; then
+			# simple search to get and grab the files required
+			sudo apt-get update
+			sudo apt-get -y install python-dev autotools-dev libicu-dev build-essential libbz2-dev 
 
-		#Downloading boost. Change Link if you want a different version
-		echo "Downloading boost"
-		cd ~
-		wget -O boost_1_55_0.tar.gz http://sourceforge.net/projects/boost/files/boost/1.55.0/boost_1_55_0.tar.gz/download
-	
-		#Extracting boost
-		echo "Extracting boost"
-		tar xzvf boost_1_55_0.tar.gz
-		cd boost_1_55_0/
-	
-		# boost's bootsrap setup
-		./bootstrap.sh --prefix=/usr/local
-    
-		# If we want MPI then we need to set the flag in the user-config.jam file
-		user_configFile=`find $PWD -name user-config.jam`
-		echo "using mpi ;" >> $user_configFile
-    
-		# Find the number of available hardware threads
-		n=$(nproc)
-
-		# Install boost in parallel
-		if [$n !== 1]
-		then
-			$n = $n / 2
-			sudo ./b2 --with=all -j $n install 
-		else 
-			sudo ./b2 --with=all install
-		fi
-		# Reset the ldconfig, assumes you have /usr/local/lib setup already. Else you can add it to your LD_LIBRARY_PATH, running this anyway
-		# will not hurt.
-		sudo ldconfig  
-		echo "Boost installation complete."
-	elif [[ $DISTRIB_ID=Ubuntu && $DISTRIB_RELEASE == 16.10 ]] ; then
-		# simple search to get and grab the files required
-		sudo apt-get update
-		sudo apt-get -y install python-dev autotools-dev libicu-dev build-essential libbz2-dev 
-
-		#Downloading boost. Change Link if you want a different version
-		echo "Downloading boost"
-		cd ~
-		wget -O boost_1_61_0.tar.gz http://sourceforge.net/projects/boost/files/boost/1.61.0/boost_1_61_0.tar.gz/download
-	
-		#Extracting boost
-		echo "Extracting boost"
-		tar xzvf boost_1_61_0.tar.gz
-		cd boost_1_61_0/
-	
-		# boost's bootsrap setup
-		./bootstrap.sh --prefix=/usr/local
-    
-		# If we want MPI then we need to set the flag in the user-config.jam file
-		user_configFile=`find $PWD -name user-config.jam`
-		echo "using mpi ;" >> $user_configFile
-    
-		# Find the number of available hardware threads
-		n=$(nproc)
-
-		# Install boost in parallel
-		if [$n !== 1]
-		then
-			$n = $n / 2
-			sudo ./b2 --with=all -j $n install 
-		else 
-			sudo ./b2 --with=all install
-		fi
-		# Reset the ldconfig, assumes you have /usr/local/lib setup already. Else you can add it to your LD_LIBRARY_PATH, running this anyway
-		# will not hurt.
-		sudo ldconfig  
-		echo "Boost installation complete."
-	elif [[$VERSION=8 && $ID=debian]] ; then
-		# simple search to get and grab the files required
-			apt-get update
-			apt-get -y install python-dev autotools-dev libicu-dev build-essential libbz2-dev 
-		#Downloading boost. Change Link if you want a different version
+			#Downloading boost. Change Link if you want a different version
 			echo "Downloading boost"
 			cd ~
 			wget -O boost_1_55_0.tar.gz http://sourceforge.net/projects/boost/files/boost/1.55.0/boost_1_55_0.tar.gz/download
-		#Extracting boost
+		
+			#Extracting boost
 			echo "Extracting boost"
 			tar xzvf boost_1_55_0.tar.gz
 			cd boost_1_55_0/
-		# boost's bootsrap setup
+		
+			# boost's bootsrap setup
 			./bootstrap.sh --prefix=/usr/local
-		# If we want MPI then we need to set the flag in the user-config.jam file
+		
+			# If we want MPI then we need to set the flag in the user-config.jam file
 			user_configFile=`find $PWD -name user-config.jam`
 			echo "using mpi ;" >> $user_configFile
-		# Find the number of available hardware threads
+		
+			# Find the number of available hardware threads
 			n=$(nproc)
 
-		# Install boost in parallel
+			# Install boost in parallel
 			if [$n !== 1]
 			then
 				$n = $n / 2
-				./b2 --with=all -j $n install 
+				sudo ./b2 --with=all -j $n install 
 			else 
-				./b2 --with=all install
-			fi	
+				sudo ./b2 --with=all install
+			fi
+			# Reset the ldconfig, assumes you have /usr/local/lib setup already. Else you can add it to your LD_LIBRARY_PATH, running this anyway
+			# will not hurt.
+			sudo ldconfig  
+			echo "Boost installation complete."
+		elif [[ $DISTRIB_ID=Ubuntu && $DISTRIB_RELEASE == 16.10 ]] ; then
+			# simple search to get and grab the files required
+			sudo apt-get update
+			sudo apt-get -y install python-dev autotools-dev libicu-dev build-essential libbz2-dev 
+
+			#Downloading boost. Change Link if you want a different version
+			echo "Downloading boost"
+			cd ~
+			wget -O boost_1_61_0.tar.gz http://sourceforge.net/projects/boost/files/boost/1.61.0/boost_1_61_0.tar.gz/download
+		
+			#Extracting boost
+			echo "Extracting boost"
+			tar xzvf boost_1_61_0.tar.gz
+			cd boost_1_61_0/
+		
+			# boost's bootsrap setup
+			./bootstrap.sh --prefix=/usr/local
+		
+			# If we want MPI then we need to set the flag in the user-config.jam file
+			user_configFile=`find $PWD -name user-config.jam`
+			echo "using mpi ;" >> $user_configFile
+		
+			# Find the number of available hardware threads
+			n=$(nproc)
+
+			# Install boost in parallel
+			if [$n !== 1]
+			then
+				$n = $n / 2
+				sudo ./b2 --with=all -j $n install 
+			else 
+				sudo ./b2 --with=all install
+			fi
+			# Reset the ldconfig, assumes you have /usr/local/lib setup already. Else you can add it to your LD_LIBRARY_PATH, running this anyway
+			# will not hurt.
+			sudo ldconfig  
+			echo "Boost installation complete."
+		elif [[$VERSION=8 && $ID=debian]] ; then
+			# simple search to get and grab the files required
+				apt-get update
+				apt-get -y install python-dev autotools-dev libicu-dev build-essential libbz2-dev 
+			#Downloading boost. Change Link if you want a different version
+				echo "Downloading boost"
+				cd ~
+				wget -O boost_1_55_0.tar.gz http://sourceforge.net/projects/boost/files/boost/1.55.0/boost_1_55_0.tar.gz/download
+			#Extracting boost
+				echo "Extracting boost"
+				tar xzvf boost_1_55_0.tar.gz
+				cd boost_1_55_0/
+			# boost's bootsrap setup
+				./bootstrap.sh --prefix=/usr/local
+			# If we want MPI then we need to set the flag in the user-config.jam file
+				user_configFile=`find $PWD -name user-config.jam`
+				echo "using mpi ;" >> $user_configFile
+			# Find the number of available hardware threads
+				n=$(nproc)
+
+			# Install boost in parallel
+				if [$n !== 1]
+				then
+					$n = $n / 2
+					./b2 --with=all -j $n install 
+				else 
+					./b2 --with=all install
+				fi	
+		fi
 	fi
 fi
 
@@ -319,26 +320,26 @@ if [[ $NUM == "1" || $NUM == "3" || $NUM == "6" || $NUM == "8" ]]; then
 	echo "Do you want to download the latest blockchain (atm only 64bit. 64bit and 32bit are not compatible)	[y/n]?"
 	read x
 		if [[ $x == "N" || $x == "n" ]]; then
-		echo "You choosed no"
-	else
-		#Creating directory
-		mkdir ~/.hashcash/
-		cd ~/.hashcash/
-		rm -f blocks.dat
-		rm -f blockindexes.dat
-		rm -f p2pstate.bin
+			echo "You choosed no"
+		else
+			#Creating directory
+			mkdir ~/.hashcash/
+			cd ~/.hashcash/
+			rm -f blocks.dat
+			rm -f blockindexes.dat
+			rm -f p2pstate.bin
+			
+			cd ..
+			
+			git clone https://github.com/HashGate/HashCash-Blockchain.git ~/.hashcash/
+			
+			
 		
-		cd ..
+			#Downloading blockchain
+			
 		
-		git clone https://github.com/HashGate/HashCash-Blockchain.git ~/.hashcash/
-		
-		
-	
-		#Downloading blockchain
-		
-	
-		echo "Download completed"
-	fi
+			echo "Download completed"
+		fi
 fi
 
 #############################################################
